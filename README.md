@@ -163,6 +163,4 @@ MIT License – For academic and educational use.
 
 ---
 
-If you paste **this** into `README.md` in your repo, GitHub will show all headings, code blocks, and tables properly.
 
-Do you want me to also **add shields.io badges** at the top for Rust version, build status, and license to make it look more professional? That would make it more GitHub-ready.
