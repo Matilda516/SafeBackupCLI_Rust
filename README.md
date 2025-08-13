@@ -3,7 +3,7 @@
 
 ## 📌 Overview
 
-SafeBackup CLI is a secure, memory-safe file management utility written in **Rust** for **CYB225 Cloud Security**.
+SafeBackup CLI is a secure, memory-safe file management utility written in **Rust** for **CYB225 Secure Coding**.
 
 It supports:
 
