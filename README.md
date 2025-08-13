@@ -1,141 +1,168 @@
+
 # SafeBackup CLI – CYB235 Secure File Utility
 
-## Overview
+## 📌 Overview
 
-**SafeBackup CLI** is a secure, memory-safe file management utility written in **Rust** for the **CYB235 Cloud Security** course.  
+SafeBackup CLI is a secure, memory-safe file management utility written in **Rust** for **CYB235 Cloud Security**.
 
 It supports:
-- **Backup** a file to a specified directory  
-- **Retrieve** (restore) a file from a backup  
-- **Delete** a file (with optional confirmation)  
-- **Logging** of all actions and errors to `logfile.txt` for audit purposes  
 
-**Security Highlights:**
-- **Memory safety** – ensured by Rust’s ownership model  
-- **Secure file operations** – prevents path traversal (`..`) and invalid filenames  
-- **Robust error handling** – uses `Result` and `Option` patterns to handle failures  
-- **Audit logging** – logs successes and failures with RFC3339 timestamps  
+* **Backup** a file to a specified directory
+* **Retrieve** (restore) a file from a backup
+* **Delete** a file (with optional confirmation)
+* **Logging** of all actions and errors to `logfile.txt` for audit purposes
 
-This approach aligns with Australian cybersecurity best practices, including the [ACSC Essential Eight](https://www.cyber.gov.au/acsc/essential-eight) and OAIC’s Notifiable Data Breaches Scheme.
+The tool is built with **modern secure coding practices**:
 
----
+* **Memory safety** – guaranteed by Rust’s ownership model
+* **Secure file operations** – prevents path traversal (`..`) and invalid filenames
+* **Robust error handling** – uses `Result` and `Option` patterns so no errors are ignored
+* **Audit logging** – all successes and failures logged with RFC3339 timestamps
 
-## Features
-
-- Rejects malicious filename input (e.g., `../../etc/passwd`)
-- Logs every operation for compliance and incident response
-- Works in both local and cloud-hosted environments
-- Cross-platform support (Windows, macOS, Linux with Rust installed)
+This aligns with **Australian cybersecurity guidance** including the [ACSC Essential Eight](https://www.cyber.gov.au/acsc/essential-eight) and the Notifiable Data Breaches Scheme under the OAIC.
 
 ---
 
-## Directory Structure
+## ✨ Features
 
+* Rejects malicious filename input (e.g., `../../etc/passwd`)
+* Logs every operation for compliance and incident response
+* Works in both local and cloud-hosted file systems
+* Cross-platform (Windows, macOS, Linux with Rust installed)
+
+---
+
+## 📂 Directory Structure
+
+```
 Mati_SafeFolder/
 ├── sample.txt
 ├── data.txt
-├── backup_dir/ # Backup storage location
-├── logfile.txt # Generated audit log
-└── safebackup_cli/ # Rust project folder
-├── Cargo.toml
-└── src/
-└── main.rs
-
-yaml
-Copy
-Edit
+├── backup_dir/       # Backup storage location
+├── logfile.txt       # Generated audit log
+└── safebackup_cli/   # Rust project folder
+    ├── Cargo.toml
+    └── src/
+        └── main.rs
+```
 
 ---
 
-## Installation
+## ⚙️ Installation
 
-Clone the repository:
+**Clone the repository**
+
 ```bash
 git clone https://github.com/<yourusername>/safebackup_cli.git
 cd safebackup_cli
-Add dependency:
+```
 
-bash
-Copy
-Edit
+**Add dependency**
+
+```bash
 cargo add chrono
-Build the release binary:
+```
 
-bash
-Copy
-Edit
+**Build the release binary**
+
+```bash
 cargo build --release
-The executable will be located at:
+```
 
-arduino
-Copy
-Edit
-target/release/safebackup_cli(.exe)
-Usage
-From the folder containing your test files:
+**Executable Location**
 
-Backup a file:
+```
+target/release/safebackup_cli       # Linux / macOS
+target/release/safebackup_cli.exe   # Windows
+```
 
-bash
-Copy
-Edit
+---
+
+## 💻 Usage
+
+**Backup a file**
+
+```bash
 ./safebackup_cli backup sample.txt backup_dir
-Retrieve a backed-up file:
+```
 
-bash
-Copy
-Edit
+**Retrieve a backed-up file**
+
+```bash
 ./safebackup_cli retrieve backup_dir/sample.txt
-Delete a file:
+```
 
-bash
-Copy
-Edit
+**Delete a file**
+
+```bash
 ./safebackup_cli delete data.txt
-Syntax:
+```
 
-php-template
-Copy
-Edit
+**Syntax**
+
+```
 safebackup_cli <command> <file> [backup_directory]
-Commands:
+```
 
-backup <source_file> <backup_directory>
+**Commands**
 
-retrieve <backup_file>
+| Command    | Parameters                         | Description                          |
+| ---------- | ---------------------------------- | ------------------------------------ |
+| `backup`   | `<source_file> <backup_directory>` | Copies file to backup location       |
+| `retrieve` | `<backup_file>`                    | Restores file from backup            |
+| `delete`   | `<file_path>`                      | Deletes file (optional confirmation) |
 
-delete <file_path>
+---
 
-Test Cases
-#	Scenario	Command	Expected Result
-1	Backup valid file	backup sample.txt backup_dir	File copied, Success logged
-2	Retrieve valid file	retrieve backup_dir/sample.txt	Content printed, Success logged
-3	Delete valid file	delete data.txt	Deleted, Success logged
-4	Delete cancelled (if enabled)	delete data.txt → no	Cancelled, log shows cancellation
-5	Path traversal attempt	backup ../../etc/passwd backup_dir	Rejected, log: path traversal detected
-6	Invalid filename	delete inva|id?.txt	Rejected, invalid filename logged
-7	Retrieve non-existent file	retrieve nofile.txt	Error, failure logged
-8	Delete non-existent file	delete nofile.txt	Error, failure logged
+## 🧪 Test Cases
 
-Logging
-All actions and errors are appended to logfile.txt:
+| # | Scenario                      | Command                              | Expected Result                   |
+| - | ----------------------------- | ------------------------------------ | --------------------------------- |
+| 1 | Backup valid file             | `backup sample.txt backup_dir`       | File copied, success logged       |
+| 2 | Retrieve valid file           | `retrieve backup_dir/sample.txt`     | Content printed, success logged   |
+| 3 | Delete valid file             | `delete data.txt`                    | File deleted, success logged      |
+| 4 | Delete cancelled (if enabled) | `delete data.txt` → `no`             | Cancelled, log shows cancellation |
+| 5 | Path traversal attempt        | `backup ../../etc/passwd backup_dir` | Rejected, path traversal logged   |
+| 6 | Invalid filename              | `delete inva\|id?.txt`               | Rejected, invalid filename logged |
+| 7 | Retrieve non-existent file    | `retrieve nofile.txt`                | Error, failure logged             |
+| 8 | Delete non-existent file      | `delete nofile.txt`                  | Error, failure logged             |
 
-ruby
-Copy
-Edit
+---
+
+## 📝 Logging
+
+All actions and errors are appended to `logfile.txt` in the format:
+
+```
 YYYY-MM-DDTHH:MM:SS+TZ, <command>, <status>
-Example:
+```
 
-pgsql
-Copy
-Edit
+**Example**
+
+```
 2025-08-13T16:25:00+10:00, backup, Success
 2025-08-13T16:26:15+10:00, delete, Invalid input - path traversal detected
-Security Considerations
-Input validation – prevents directory traversal or unsafe filenames
+```
 
-Least privilege – executes only the requested operation
+---
 
-Complete auditing – supports ASD Essential Eight monitoring and response
+## 🔒 Security Considerations
 
-Data privacy – no unintended data exposure
+| Security Measure      | Purpose                                           |
+| --------------------- | ------------------------------------------------- |
+| **Input validation**  | Prevents directory traversal and unsafe filenames |
+| **Least privilege**   | Executes only the requested operation             |
+| **Complete auditing** | Meets ASD Essential Eight monitoring requirements |
+| **Data privacy**      | Prevents unintended data disclosure               |
+
+---
+
+## 📜 License
+
+MIT License – For academic and educational use.
+
+---
+
+If you paste **this** into `README.md` in your repo, GitHub will show all headings, code blocks, and tables properly.
+
+Do you want me to also **add shields.io badges** at the top for Rust version, build status, and license to make it look more professional? That would make it more GitHub-ready.
